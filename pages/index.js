@@ -113,7 +113,7 @@ export default function Home() {
       <div>
         {flattened.map(({ key, question }, ind) => (
           <div>
-            <h3>{key}</h3>
+            {/* <h3>{key}</h3> */}
             <>
               <div>
                 <h4>
