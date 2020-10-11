@@ -1,0 +1,64 @@
+{
+  "RP_MORALITY": [
+    "Respect in a relationship is shown through admiration and deference",
+    "Following gender roles helps both men and women achieve self actualization and become more satified with their lives",
+    "Without accomplishments, men have less inherent value than women",
+    "Lying to get sex is okay",
+    "It is the man's role to lead the relationship",
+    "I would rather have my son be attractive than a good person",
+    "it is important that I live in MY society"
+  ],
+  "BP_MORALITY": [
+    "People should be altruistic more than self-interested.",
+    "Feminism is still needed today",
+    "Marriage is important to me",
+    "creating generalities about groups of people is wrong",
+    "it is important that WE live in A society",
+    "Being a good human being will lead you to a good relationship."
+  ],
+  "RP_BOTH": [
+    "A male led relationship is an ideal relationship",
+    "Gender roles are important for sexual success.",
+    "Relationships are transactional in nature",
+    "Feminism's affect on society has been a net negative for men",
+    "Marriage is a bad deal for men",
+    "women's careers are irrelevant to men's attraction",
+    "Men and women have competing and contradictory goals",
+    "if a girl hesitates before sex at the last minute, she often isn't being sincere"
+  ],
+  "BP_BOTH": [
+    "A lack of attraction can be fixed with increased communication.",
+    "Marriage constricts women into narrow roles of mother/wife",
+    "Women can be happy while single",
+    "Men are just as suited to nurturing and caretaking as women",
+    "Insecurity is unhealthy for relationships"
+  ],
+  "RP_REALITY": [
+    "women are more happy at home taking care of children than they are pursuing a career",
+    "women have more pragmatic views on their partners while men have more idealistic views of their partners",
+    "sexual attraction the best predictor for relationship success",
+    "There are substantial and inherent cognitive differences between men and women on the whole.",
+    "All women can be seduced by a sufficiently attractive man if left alone with him.",
+    "Higher risk behavior in men is sexually attractive to woman",
+    "Someone's sexual past is relevant to how they will behave in the future",
+    "Men mature slower but end up more mature than women in adulthood",
+    "Men can be divided into a hierarchy of sexual success where each class of men shares similar traits",
+    "Modern dating favors women",
+    "Women are more tolerant of \"asshole\" behaviors of attractive men",
+    "the behaviors of men and women can be effectively generalized",
+    "Women will settle down with/marry men they are not sexually attracted to later in life",
+    "Men are inherently more dangerous than women",
+    "Women are inherently more manipulative than men",
+    "Psychology is merely an extension of biology",
+    "one cannot expect commitment to last long term"
+  ],
+  "BP_REALITY": [
+    "One's environment is more important than genetics in shaping human sexual behavior and choices",
+    "What women say they find attractive lines up with the men they seek out and end up with",
+    "People are altruistic more than self-interested.",
+    "True love exists",
+    "Men being nice to women is attractive",
+    "Gender roles are a social construct.",
+    "Women select men who share their values"
+  ]
+}
