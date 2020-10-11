@@ -19,14 +19,6 @@ const ANSWERS = {
 
 const toScore = (obj) => Object.values(obj).reduce((sum, val) => sum + val, 0);
 
-const toOverallScore = (rpScore, bpScore) => {
-  const rp = toScore(rpScore);
-  const bp = toScore(bpScore);
-  const total = rp - bp + 20; // (-20 -> 30 => shift over by 20)
-  const percent = total * 2;
-  return percent.toFixed(0);
-};
-
 const flattened = Object.entries(questions).reduce((array, [key, qs]) => {
   return [
     ...array,
@@ -36,6 +28,28 @@ const flattened = Object.entries(questions).reduce((array, [key, qs]) => {
     })),
   ];
 }, []);
+
+const TOTAL_RP_POINTS = flattened
+  .filter(({ key }) => key.includes('RP'))
+  .reduce((sum, { key }) => {
+    const [_, weight] = key.split('_');
+    return sum + WEIGHTS[weight];
+  }, 0);
+
+const TOTAL_BP_POINTS = flattened
+  .filter(({ key }) => key.includes('BP'))
+  .reduce((sum, { key }) => {
+    const [_, weight] = key.split('_');
+    return sum + WEIGHTS[weight];
+  }, 0);
+
+const toOverallScore = (rpScore, bpScore) => {
+  const rp = toScore(rpScore);
+  const bp = toScore(bpScore);
+  const total = rp - bp + TOTAL_BP_POINTS;
+  const percent = total / (TOTAL_RP_POINTS + TOTAL_BP_POINTS) * 100;
+  return percent.toFixed(0);
+};
 
 export default function Home() {
   const [rpScore, updateRpScore] = useState({});
@@ -99,7 +113,7 @@ export default function Home() {
       <div>
         {flattened.map(({ key, question }, ind) => (
           <div>
-            {/* <>{key}</> */}
+            <h3>{key}</h3>
             <>
               <div>
                 <h4>
