@@ -11,10 +11,10 @@ const WEIGHTS = {
 
 const ANSWERS = {
   stronglyAgree: 1,
-  agree: 0.75,
-  neutral: 0.5,
-  disagree: 0.25,
-  stronglyDisagree: 0,
+  agree: 0.5,
+  neutral: 0,
+  disagree: -0.5,
+  stronglyDisagree: -1,
 };
 
 const toScore = (obj) => Object.values(obj).reduce((sum, val) => sum + val, 0);
