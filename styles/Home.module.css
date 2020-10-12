@@ -1,5 +1,17 @@
 .container {
   padding: 16px;
-  display: grid;
-  grid-template-columns: 1fr 200px;
+}
+
+.container > *:last-child {
+  margin-top: 80px;
+}
+
+@media (min-width: 650px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+  }
+  .container > *:last-child {
+    margin-top: 0px;
+  }
 }
