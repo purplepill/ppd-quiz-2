@@ -57,16 +57,31 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      const scores = JSON.parse(localStorage.getItem('score'));
+      const scores = JSON.parse(localStorage.getItem('answers'));
       updateRpScore(scores.rpScore);
       updateBpScore(scores.bpScore);
     } catch {}
+
+      try {
+        const scores = JSON.parse(localStorage.getItem('score'));
+        const newRpScore = Object.keys(scores.rpScore || {}).reduce((acc, key) => ({
+          ...acc,
+          [flattened[key].question]: scores.rpScore[key],
+        }), {});
+        const newBpScore = Object.keys(scores.bpScore || {}).reduce((acc, key) => ({
+          ...acc,
+          [flattened[key].question]: scores.bpScore[key],
+        }), {});
+        updateRpScore(newRpScore);
+        updateBpScore(newBpScore);
+        localStorage.removeItem('score');
+      } catch {}
   }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(
-        'score',
+        'answers',
         JSON.stringify({
           rpScore,
           bpScore,
@@ -124,8 +139,8 @@ export default function Home() {
                   id={`${ind}_stronglyAgree`}
                   type='radio'
                   value='stronglyAgree'
-                  onChange={answer(ind, key, ANSWERS.stronglyAgree)}
-                  checked={checked(ind, key, ANSWERS.stronglyAgree)}
+                  onChange={answer(question, key, ANSWERS.stronglyAgree)}
+                  checked={checked(question, key, ANSWERS.stronglyAgree)}
                 />
                 <label htmlFor={`${ind}_stronglyAgree`}>Strongly Agree</label>
                 <input
@@ -133,8 +148,8 @@ export default function Home() {
                   id={`${ind}_agree`}
                   type='radio'
                   value='agree'
-                  onChange={answer(ind, key, ANSWERS.agree)}
-                  checked={checked(ind, key, ANSWERS.agree)}
+                  onChange={answer(question, key, ANSWERS.agree)}
+                  checked={checked(question, key, ANSWERS.agree)}
                 />
                 <label htmlFor={`${ind}_agree`}>Agree</label>
                 <input
@@ -142,8 +157,8 @@ export default function Home() {
                   id={`${ind}_neutral`}
                   type='radio'
                   value='neutral'
-                  onChange={answer(ind, key, ANSWERS.neutral)}
-                  checked={checked(ind, key, ANSWERS.neutral)}
+                  onChange={answer(question, key, ANSWERS.neutral)}
+                  checked={checked(question, key, ANSWERS.neutral)}
                 />
                 <label htmlFor={`${ind}_neutral`}>Neutral</label>
                 <input
@@ -151,8 +166,8 @@ export default function Home() {
                   id={`${ind}_disagree`}
                   type='radio'
                   value='disagree'
-                  onChange={answer(ind, key, ANSWERS.disagree)}
-                  checked={checked(ind, key, ANSWERS.disagree)}
+                  onChange={answer(question, key, ANSWERS.disagree)}
+                  checked={checked(question, key, ANSWERS.disagree)}
                 />
                 <label htmlFor={`${ind}_disagree`}>Disagree</label>
                 <input
@@ -160,8 +175,8 @@ export default function Home() {
                   id={`${ind}_stronglyDisagree`}
                   type='radio'
                   value='stronglyDisagree'
-                  onChange={answer(ind, key, ANSWERS.stronglyDisagree)}
-                  checked={checked(ind, key, ANSWERS.stronglyDisagree)}
+                  onChange={answer(question, key, ANSWERS.stronglyDisagree)}
+                  checked={checked(question, key, ANSWERS.stronglyDisagree)}
                 />
                 <label htmlFor={`${ind}_stronglyDisagree`}>
                   Strongly Disagree
