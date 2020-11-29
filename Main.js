@@ -136,7 +136,7 @@ export default function Home({ admin }) {
       const scores = JSON.parse(localStorage.getItem('answers'));
       updateRpScore(scores.rpScore);
       updateBpScore(scores.bpScore);
-    } catch {}
+    } catch { }
   }, []);
 
   useEffect(() => {
@@ -198,6 +198,15 @@ export default function Home({ admin }) {
   return (
     <div className={styles.container}>
       <div>
+        <div className={styles.intro}>
+          This quiz is designed to determine your beliefs about
+          The Red Pill ideology or lack there of.
+          It test both how you believe things to be,
+          and how you believe things should be.
+          If questions are ambiguous as to whether
+          they are about you personally or are
+          universal statements, answer how you best see fit.
+        </div>
         {showQuestions &&
           flattened.map(({ key, question }, ind) => (
             <div key={`${key}_${ind}`}>
