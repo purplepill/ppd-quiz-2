@@ -120,14 +120,13 @@ const toMoralityScore = (rpScore, bpScore) => {
 export default function Home({ admin }) {
   const [rpScore, updateRpScore] = useState({});
   const [bpScore, updateBpScore] = useState({});
-  
 
   useEffect(() => {
     try {
       const scores = JSON.parse(localStorage.getItem('answers'));
       updateRpScore(scores.rpScore);
       updateBpScore(scores.bpScore);
-    } catch { }
+    } catch {}
   }, []);
 
   useEffect(() => {
@@ -184,7 +183,7 @@ export default function Home({ admin }) {
     const currentBP_points = Object.keys(bpScore).length;
 
     if (currentRP_points + currentBP_points !== flattened.length) {
-      return (<>Complete all questions to see results.</>)
+      return <>Complete all questions to see results.</>;
     }
 
     return (
@@ -201,139 +200,139 @@ export default function Home({ admin }) {
         >
           CLEAR ANSWERS
         </button>
-      </> 
+      </>
     );
-  }
+  };
 
-return (
-  <div className={styles.container}>
-    <div>
-      {flattened.map(({ key, question }, ind) => (
-        <div>
-          {admin && <h3>{key}</h3>}
-          <>
-            <div className={styles.question}>
-              <h4>
-                {ind + 1}: {question}
-              </h4>
-              <div>
-                <input
-                  name={question}
-                  id={`${ind}_stronglyAgree`}
-                  type='radio'
-                  value='stronglyAgree'
-                  onChange={answer(question, key, ANSWERS.stronglyAgree)}
-                  checked={checked(question, key, ANSWERS.stronglyAgree)}
-                />
-                <label htmlFor={`${ind}_stronglyAgree`}>Strongly Agree</label>
-              </div>
-              <div>
-                <input
-                  name={question}
-                  id={`${ind}_agree`}
-                  type='radio'
-                  value='agree'
-                  onChange={answer(question, key, ANSWERS.agree)}
-                  checked={checked(question, key, ANSWERS.agree)}
-                />
-                <label htmlFor={`${ind}_agree`}>Agree</label>
-              </div>
-              <div>
-                {' '}
-                <input
-                  name={question}
-                  id={`${ind}_neutral`}
-                  type='radio'
-                  value='neutral'
-                  onChange={answer(question, key, ANSWERS.neutral)}
-                  checked={checked(question, key, ANSWERS.neutral)}
-                />
-                <label htmlFor={`${ind}_neutral`}>Neutral</label>
-              </div>
-              <div>
-                <input
-                  name={question}
-                  id={`${ind}_disagree`}
-                  type='radio'
-                  value='disagree'
-                  onChange={answer(question, key, ANSWERS.disagree)}
-                  checked={checked(question, key, ANSWERS.disagree)}
-                />
-                <label htmlFor={`${ind}_disagree`}>Disagree</label>
-              </div>
-              <div>
-                {' '}
-                <input
-                  name={question}
-                  id={`${ind}_stronglyDisagree`}
-                  type='radio'
-                  value='stronglyDisagree'
-                  onChange={answer(question, key, ANSWERS.stronglyDisagree)}
-                  checked={checked(question, key, ANSWERS.stronglyDisagree)}
-                />
-                <label htmlFor={`${ind}_stronglyDisagree`}>
-                  Strongly Disagree
+  return (
+    <div className={styles.container}>
+      <div>
+        {flattened.map(({ key, question }, ind) => (
+          <div>
+            {admin && <h3>{key}</h3>}
+            <>
+              <div className={styles.question}>
+                <h4>
+                  {ind + 1}: {question}
+                </h4>
+                <div>
+                  <input
+                    name={question}
+                    id={`${ind}_stronglyAgree`}
+                    type='radio'
+                    value='stronglyAgree'
+                    onChange={answer(question, key, ANSWERS.stronglyAgree)}
+                    checked={checked(question, key, ANSWERS.stronglyAgree)}
+                  />
+                  <label htmlFor={`${ind}_stronglyAgree`}>Strongly Agree</label>
+                </div>
+                <div>
+                  <input
+                    name={question}
+                    id={`${ind}_agree`}
+                    type='radio'
+                    value='agree'
+                    onChange={answer(question, key, ANSWERS.agree)}
+                    checked={checked(question, key, ANSWERS.agree)}
+                  />
+                  <label htmlFor={`${ind}_agree`}>Agree</label>
+                </div>
+                <div>
+                  {' '}
+                  <input
+                    name={question}
+                    id={`${ind}_neutral`}
+                    type='radio'
+                    value='neutral'
+                    onChange={answer(question, key, ANSWERS.neutral)}
+                    checked={checked(question, key, ANSWERS.neutral)}
+                  />
+                  <label htmlFor={`${ind}_neutral`}>Neutral</label>
+                </div>
+                <div>
+                  <input
+                    name={question}
+                    id={`${ind}_disagree`}
+                    type='radio'
+                    value='disagree'
+                    onChange={answer(question, key, ANSWERS.disagree)}
+                    checked={checked(question, key, ANSWERS.disagree)}
+                  />
+                  <label htmlFor={`${ind}_disagree`}>Disagree</label>
+                </div>
+                <div>
+                  {' '}
+                  <input
+                    name={question}
+                    id={`${ind}_stronglyDisagree`}
+                    type='radio'
+                    value='stronglyDisagree'
+                    onChange={answer(question, key, ANSWERS.stronglyDisagree)}
+                    checked={checked(question, key, ANSWERS.stronglyDisagree)}
+                  />
+                  <label htmlFor={`${ind}_stronglyDisagree`}>
+                    Strongly Disagree
                   </label>
+                </div>
               </div>
-            </div>
+            </>
+          </div>
+        ))}
+      </div>
+      <div>
+        <ScoreTable />
+        {admin && (
+          <>
+            <button
+              onClick={() => {
+                const answers = flattened.reduce((acc, { key, question }) => {
+                  const [pill, weight] = key.split('_');
+                  const score = WEIGHTS[weight];
+
+                  return {
+                    rp: {
+                      ...acc.rp,
+                      ...(pill === 'RP' ? { [question]: score } : {}),
+                    },
+                    bp: {
+                      ...acc.bp,
+                      ...(pill === 'BP' ? { [question]: score * -1 } : {}),
+                    },
+                  };
+                }, {});
+                updateRpScore(answers.rp);
+                updateBpScore(answers.bp);
+              }}
+            >
+              Answer All RP
+            </button>
+
+            <button
+              onClick={() => {
+                const answers = flattened.reduce((acc, { key, question }) => {
+                  const [pill, weight] = key.split('_');
+                  const score = WEIGHTS[weight];
+
+                  return {
+                    rp: {
+                      ...acc.rp,
+                      ...(pill === 'RP' ? { [question]: score * -1 } : {}),
+                    },
+                    bp: {
+                      ...acc.bp,
+                      ...(pill === 'BP' ? { [question]: score } : {}),
+                    },
+                  };
+                }, {});
+                updateRpScore(answers.rp);
+                updateBpScore(answers.bp);
+              }}
+            >
+              Answer All BP
+            </button>
           </>
-        </div>
-      ))}
+        )}
+      </div>
     </div>
-    <div>
-      <ScoreTable />
-      {admin && (
-        <>
-          <button
-            onClick={() => {
-              const answers = flattened.reduce((acc, { key, question }) => {
-                const [pill, weight] = key.split('_');
-                const score = WEIGHTS[weight];
-
-                return {
-                  rp: {
-                    ...acc.rp,
-                    ...(pill === 'RP' ? { [question]: score } : {}),
-                  },
-                  bp: {
-                    ...acc.bp,
-                    ...(pill === 'BP' ? { [question]: score * -1 } : {}),
-                  },
-                };
-              }, {});
-              updateRpScore(answers.rp);
-              updateBpScore(answers.bp);
-            }}
-          >
-            Answer All RP
-            </button>
-
-          <button
-            onClick={() => {
-              const answers = flattened.reduce((acc, { key, question }) => {
-                const [pill, weight] = key.split('_');
-                const score = WEIGHTS[weight];
-
-                return {
-                  rp: {
-                    ...acc.rp,
-                    ...(pill === 'RP' ? { [question]: score * -1 } : {}),
-                  },
-                  bp: {
-                    ...acc.bp,
-                    ...(pill === 'BP' ? { [question]: score } : {}),
-                  },
-                };
-              }, {});
-              updateRpScore(answers.rp);
-              updateBpScore(answers.bp);
-            }}
-          >
-            Answer All BP
-            </button>
-        </>
-      )}
-    </div>
-  </div>
-);
+  );
 }
