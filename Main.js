@@ -127,27 +127,6 @@ export default function Home({ admin }) {
       updateRpScore(scores.rpScore);
       updateBpScore(scores.bpScore);
     } catch {}
-
-    try {
-      const scores = JSON.parse(localStorage.getItem('score'));
-      const newRpScore = Object.keys(scores.rpScore || {}).reduce(
-        (acc, key) => ({
-          ...acc,
-          [flattened[key].question]: scores.rpScore[key],
-        }),
-        {}
-      );
-      const newBpScore = Object.keys(scores.bpScore || {}).reduce(
-        (acc, key) => ({
-          ...acc,
-          [flattened[key].question]: scores.bpScore[key],
-        }),
-        {}
-      );
-      updateRpScore(newRpScore);
-      updateBpScore(newBpScore);
-      localStorage.removeItem('score');
-    } catch {}
   }, []);
 
   useEffect(() => {
