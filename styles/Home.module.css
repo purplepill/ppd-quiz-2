@@ -5,6 +5,10 @@
   margin-top: 80px;
 }
 
+.intro {
+  margin-bottom: 24px;
+}
+
 .question {
   display: flex;
   flex-direction: column;
