@@ -109,14 +109,14 @@ const toMoralityScore = (rpScore, bpScore) => {
   return rpMorality + rpBoth * 0.5 - bpMorality - bpBoth * 0.5;
 };
 
-const ScoreTable = (props) => {
-  const currentRP_points = Object.keys(rpScore).length;
-  const currentBP_points = Object.keys(bpScore).length;
-
-  if (currentRP_points + currentBP_points !== flattened.length) {
-    return <>Complete all questions to see results.</>;
-  }
-
+const ScoreTable = ({
+  rpScore,
+  bpScore,
+  reality,
+  morality,
+  percent,
+  onClearAnswers,
+}) => {
   return (
     <>
       <div>Reality Score: {reality.toFixed(2)}</div>
@@ -125,8 +125,7 @@ const ScoreTable = (props) => {
       <div>Percent RP: {percent.toFixed(0)}%</div>
       <button
         onClick={() => {
-          updateBpScore({});
-          updateRpScore({});
+          onClearAnswers();
         }}
       >
         CLEAR ANSWERS
@@ -185,6 +184,7 @@ export default function Home({ admin }) {
     if (pillType === 'BP') {
       map = bpScore;
     }
+    // eslint-disable-next-line no-prototype-builtins
     if (!map.hasOwnProperty(ind)) {
       return false;
     }
@@ -196,12 +196,16 @@ export default function Home({ admin }) {
   const morality = toMoralityScore(rpScore, bpScore);
   const percent = ((reality + morality + 51) / 102) * 100;
 
+  const currentRpPoints = Object.keys(rpScore).length;
+  const currentBpPoints = Object.keys(bpScore).length;
+
+  const showScoreTable = currentRpPoints + currentBpPoints !== flattened.length;
 
   return (
     <div className={styles.container}>
       <div>
         {flattened.map(({ key, question }, ind) => (
-          <div>
+          <div key={key}>
             {admin && <h3>{key}</h3>}
             <>
               <div className={styles.question}>
@@ -273,7 +277,22 @@ export default function Home({ admin }) {
         ))}
       </div>
       <div>
-        <ScoreTable />
+        {showScoreTable && (
+          <ScoreTable
+            {...{
+              rpScore,
+              bpScore,
+              morality,
+              reality,
+              percent,
+            }}
+            onClearAnswers={() => {
+              updateBpScore({});
+              updateRpScore({});
+            }}
+          />
+        )}
+        {!showScoreTable && <>Complete all questions to see results.</>}
         {admin && (
           <>
             <button
