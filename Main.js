@@ -109,14 +109,7 @@ const toMoralityScore = (rpScore, bpScore) => {
   return rpMorality + rpBoth * 0.5 - bpMorality - bpBoth * 0.5;
 };
 
-const ScoreTable = ({
-  rpScore,
-  bpScore,
-  reality,
-  morality,
-  percent,
-  onClearAnswers,
-}) => {
+const ScoreTable = ({ reality, morality, percent, onClearAnswers }) => {
   return (
     <>
       <div>Reality Score: {reality.toFixed(2)}</div>
@@ -199,13 +192,13 @@ export default function Home({ admin }) {
   const currentRpPoints = Object.keys(rpScore).length;
   const currentBpPoints = Object.keys(bpScore).length;
 
-  const showScoreTable = currentRpPoints + currentBpPoints !== flattened.length;
+  const showScoreTable = currentRpPoints + currentBpPoints === flattened.length;
 
   return (
     <div className={styles.container}>
       <div>
         {flattened.map(({ key, question }, ind) => (
-          <div key={key}>
+          <div key={`${key}_${ind}`}>
             {admin && <h3>{key}</h3>}
             <>
               <div className={styles.question}>
