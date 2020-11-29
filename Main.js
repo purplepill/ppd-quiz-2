@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import React from 'react';
 import styles from './styles/Home.module.css';
 import questions from './questions.json';
 import { useEffect, useState } from 'react';
@@ -50,14 +50,6 @@ const TOTAL_BP_POINTS = flattened
     const [_, weight] = key.split('_');
     return sum + WEIGHTS[weight];
   }, 0);
-
-const toOverallScore = (rpScore, bpScore) => {
-  const rp = toScore(rpScore);
-  const bp = toScore(bpScore);
-  const total = rp - bp + TOTAL_BP_POINTS;
-  const percent = (total / (TOTAL_RP_POINTS + TOTAL_BP_POINTS)) * 100;
-  return percent.toFixed(0);
-};
 
 const toRealityScore = (rpScore, bpScore) => {
   const rpReality = Object.entries(rpScore)
@@ -115,6 +107,32 @@ const toMoralityScore = (rpScore, bpScore) => {
     .reduce((sum, [_, score]) => sum + score, 0);
 
   return rpMorality + rpBoth * 0.5 - bpMorality - bpBoth * 0.5;
+};
+
+const ScoreTable = (props) => {
+  const currentRP_points = Object.keys(rpScore).length;
+  const currentBP_points = Object.keys(bpScore).length;
+
+  if (currentRP_points + currentBP_points !== flattened.length) {
+    return <>Complete all questions to see results.</>;
+  }
+
+  return (
+    <>
+      <div>Reality Score: {reality.toFixed(2)}</div>
+      <div>Morality Score: {morality.toFixed(2)}</div>
+      <div>Overall score: {(reality + morality).toFixed(2)}</div>
+      <div>Percent RP: {percent.toFixed(0)}%</div>
+      <button
+        onClick={() => {
+          updateBpScore({});
+          updateRpScore({});
+        }}
+      >
+        CLEAR ANSWERS
+      </button>
+    </>
+  );
 };
 
 export default function Home({ admin }) {
@@ -178,31 +196,6 @@ export default function Home({ admin }) {
   const morality = toMoralityScore(rpScore, bpScore);
   const percent = ((reality + morality + 51) / 102) * 100;
 
-  const ScoreTable = (props) => {
-    const currentRP_points = Object.keys(rpScore).length;
-    const currentBP_points = Object.keys(bpScore).length;
-
-    if (currentRP_points + currentBP_points !== flattened.length) {
-      return <>Complete all questions to see results.</>;
-    }
-
-    return (
-      <>
-        <div>Reality Score: {reality.toFixed(2)}</div>
-        <div>Morality Score: {morality.toFixed(2)}</div>
-        <div>Overall score: {(reality + morality).toFixed(2)}</div>
-        <div>Percent RP: {percent.toFixed(0)}%</div>
-        <button
-          onClick={() => {
-            updateBpScore({});
-            updateRpScore({});
-          }}
-        >
-          CLEAR ANSWERS
-        </button>
-      </>
-    );
-  };
 
   return (
     <div className={styles.container}>
