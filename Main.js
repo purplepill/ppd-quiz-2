@@ -112,6 +112,7 @@ const toMoralityScore = (rpScore, bpScore) => {
 const ScoreTable = ({ reality, morality, percent, onClearAnswers }) => {
   return (
     <>
+      <h2>Your results</h2>
       <div>Reality Score: {reality.toFixed(2)}</div>
       <div>Morality Score: {morality.toFixed(2)}</div>
       <div>Overall score: {(reality + morality).toFixed(2)}</div>
@@ -202,6 +203,7 @@ export default function Home({ admin }) {
       }`}
     >
       <div className={styles.questionPanel}>
+        <h2>PPD Red Pill / Blue Pill Ideology Quiz</h2>
         <div className={styles.intro}>
           This quiz is designed to determine your beliefs about The Red Pill
           ideology or lack there of. It test both how you believe things to be,
