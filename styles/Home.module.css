@@ -23,7 +23,7 @@
   background: #ffffff;
   border: 1px solid gray;
   border-radius: 4px;
-  min-height: 42px;
+  height: 42px;
   display: grid;
   align-items: center;
   grid-auto-flow: column;
@@ -35,6 +35,7 @@
   grid-column: 1;
   grid-row: 1;
   z-index: 10;
+  margin-left: 4px;
 }
 .question label {
   grid-column: 1 / span 2;
