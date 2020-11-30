@@ -59,6 +59,29 @@
     margin-top: 0px;
   }
 
+
+  .quizCompleted {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-flow: row;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .quizCompleted .scoreCard {
+    /* background: red; */
+  }
+  .scoreCard {
+    position: relative;
+  }
+
+  .scoreCard > div {
+    position: sticky;
+    right: 0;
+    top: 0;
+    width: 100%;
+  }
+
   .question {
     display: block;
   }

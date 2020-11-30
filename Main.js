@@ -136,7 +136,7 @@ export default function Home({ admin }) {
       const scores = JSON.parse(localStorage.getItem('answers'));
       updateRpScore(scores.rpScore);
       updateBpScore(scores.bpScore);
-    } catch { }
+    } catch {}
   }, []);
 
   useEffect(() => {
@@ -196,16 +196,18 @@ export default function Home({ admin }) {
   const showQuestions = !showScoreTable || admin;
 
   return (
-    <div className={styles.container}>
-      <div>
+    <div
+      className={`${styles.container} ${
+        !showQuestions ? styles.quizCompleted : ''
+      }`}
+    >
+      <div className={styles.questionPanel}>
         <div className={styles.intro}>
-          This quiz is designed to determine your beliefs about
-          The Red Pill ideology or lack there of.
-          It test both how you believe things to be,
-          and how you believe things should be.
-          If questions are ambiguous as to whether
-          they are about you personally or are
-          universal statements, answer how you best see fit.
+          This quiz is designed to determine your beliefs about The Red Pill
+          ideology or lack there of. It test both how you believe things to be,
+          and how you believe things should be. If questions are ambiguous as to
+          whether they are about you personally or are universal statements,
+          answer how you best see fit.
         </div>
         {showQuestions &&
           flattened.map(({ key, question }, ind) => (
@@ -282,74 +284,76 @@ export default function Home({ admin }) {
             </div>
           ))}
       </div>
-      <div>
-        {showScoreTable && (
-          <ScoreTable
-            {...{
-              rpScore,
-              bpScore,
-              morality,
-              reality,
-              percent,
-            }}
-            onClearAnswers={() => {
-              updateBpScore({});
-              updateRpScore({});
-            }}
-          />
-        )}
-        {!showScoreTable && <>Complete all questions to see results.</>}
-        {admin && (
-          <>
-            <button
-              onClick={() => {
-                const answers = flattened.reduce((acc, { key, question }) => {
-                  const [pill, weight] = key.split('_');
-                  const score = WEIGHTS[weight];
-
-                  return {
-                    rp: {
-                      ...acc.rp,
-                      ...(pill === 'RP' ? { [question]: score } : {}),
-                    },
-                    bp: {
-                      ...acc.bp,
-                      ...(pill === 'BP' ? { [question]: score * -1 } : {}),
-                    },
-                  };
-                }, {});
-                updateRpScore(answers.rp);
-                updateBpScore(answers.bp);
+      <div className={styles.scoreCard}>
+        <div>
+          {showScoreTable && (
+            <ScoreTable
+              {...{
+                rpScore,
+                bpScore,
+                morality,
+                reality,
+                percent,
               }}
-            >
-              Answer All RP
-            </button>
-
-            <button
-              onClick={() => {
-                const answers = flattened.reduce((acc, { key, question }) => {
-                  const [pill, weight] = key.split('_');
-                  const score = WEIGHTS[weight];
-
-                  return {
-                    rp: {
-                      ...acc.rp,
-                      ...(pill === 'RP' ? { [question]: score * -1 } : {}),
-                    },
-                    bp: {
-                      ...acc.bp,
-                      ...(pill === 'BP' ? { [question]: score } : {}),
-                    },
-                  };
-                }, {});
-                updateRpScore(answers.rp);
-                updateBpScore(answers.bp);
+              onClearAnswers={() => {
+                updateBpScore({});
+                updateRpScore({});
               }}
-            >
-              Answer All BP
-            </button>
-          </>
-        )}
+            />
+          )}
+          {!showScoreTable && <>Complete all questions to see results.</>}
+          {admin && (
+            <>
+              <button
+                onClick={() => {
+                  const answers = flattened.reduce((acc, { key, question }) => {
+                    const [pill, weight] = key.split('_');
+                    const score = WEIGHTS[weight];
+
+                    return {
+                      rp: {
+                        ...acc.rp,
+                        ...(pill === 'RP' ? { [question]: score } : {}),
+                      },
+                      bp: {
+                        ...acc.bp,
+                        ...(pill === 'BP' ? { [question]: score * -1 } : {}),
+                      },
+                    };
+                  }, {});
+                  updateRpScore(answers.rp);
+                  updateBpScore(answers.bp);
+                }}
+              >
+                Answer All RP
+              </button>
+
+              <button
+                onClick={() => {
+                  const answers = flattened.reduce((acc, { key, question }) => {
+                    const [pill, weight] = key.split('_');
+                    const score = WEIGHTS[weight];
+
+                    return {
+                      rp: {
+                        ...acc.rp,
+                        ...(pill === 'RP' ? { [question]: score * -1 } : {}),
+                      },
+                      bp: {
+                        ...acc.bp,
+                        ...(pill === 'BP' ? { [question]: score } : {}),
+                      },
+                    };
+                  }, {});
+                  updateRpScore(answers.rp);
+                  updateBpScore(answers.bp);
+                }}
+              >
+                Answer All BP
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
