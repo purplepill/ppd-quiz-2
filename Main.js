@@ -136,8 +136,16 @@ const ScoreGraph = ({ reality, morality }) => {
   return (
     <div className={styles.scoreGraph}>
       {[...new Array(51 * 51)].map((_, i) => (
-        <div key={i}>{i}</div>
+        <div className={styles.cell} key={i}></div>
       ))}
+      <div className={styles.quad1} />
+      <div className={styles.quad2} />
+      <div className={styles.quad3} />
+      <div className={styles.quad4} />
+      <div
+        className={styles.score}
+        style={{ '--reality-score': reality, '--morality-score': morality }}
+      />
     </div>
   );
 };
@@ -145,6 +153,7 @@ const ScoreGraph = ({ reality, morality }) => {
 export default function Home({ admin }) {
   const [rpScore, updateRpScore] = useState({});
   const [bpScore, updateBpScore] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     try {
@@ -152,6 +161,7 @@ export default function Home({ admin }) {
       updateRpScore(scores.rpScore);
       updateBpScore(scores.bpScore);
     } catch {}
+    setLoaded(true);
   }, []);
 
   useEffect(() => {
@@ -165,6 +175,10 @@ export default function Home({ admin }) {
       );
     }
   }, [rpScore, bpScore]);
+
+  if (!loaded) {
+    return <></>;
+  }
 
   const answer = (ind, questionType, answeredValue) => () => {
     const [pillType, moralityOrReality] = questionType.split('_');
@@ -319,24 +333,28 @@ export default function Home({ admin }) {
             />
           )}
           {!showResults && <>Complete all questions to see results.</>}
-          {admin && <AdminPanel className={styles.adminPanel} {...{
-            updateBpScore,
-            updateRpScore,
-            rpScore,
-            bpScore,
-            WEIGHTS,
-            flattened,
-
-          }} />}
+          {admin && (
+            <AdminPanel
+              className={styles.adminPanel}
+              {...{
+                updateBpScore,
+                updateRpScore,
+                rpScore,
+                bpScore,
+                WEIGHTS,
+                flattened,
+              }}
+            />
+          )}
         </div>
       </div>
-      <div>
-        <ScoreGraph
+      <div className={styles.scoreGraphContainer}>
+        {showResults && <ScoreGraph
           {...{
             morality,
             reality,
           }}
-        />
+        />}
       </div>
     </div>
   );

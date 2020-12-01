@@ -50,16 +50,76 @@
   background: #dff1f7;
 }
 
-.scoreTable {
+.scoreTable,
+.scoreGraphContainer {
   display: flex;
   justify-content: center;
 }
 
 .scoreGraph {
   display: grid;
-  grid-template-rows: repeat(51, 1fr);
-  grid-template-columns: repeat(51, 1fr);
-  display: none;
+  grid-template-rows: repeat(51, min-content);
+  grid-template-columns: repeat(51, min-content);
+  margin-top: 40px;
+  position: relative;
+
+  --cell-size: 12px;
+}
+
+.score {
+  position: absolute;
+  background: black;
+  height: calc(var(--cell-size));
+  width: calc(var(--cell-size));
+  border-radius: 50%;
+
+  left: calc(
+    (var(--reality-score) + 25.5) * var(--cell-size) - (var(--cell-size) / 2)
+  );
+  bottom: calc(
+    (var(--morality-score) + 25.5) * var(--cell-size) - (var(--cell-size) / 2)
+  );
+}
+
+.cell {
+  border: 1px solid #e0e0e0;
+  width: var(--cell-size);
+  height: var(--cell-size);
+}
+
+.quad1,
+.quad2,
+.quad3,
+.quad4 {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  border: 1px solid black;
+  opacity: 0.5;
+}
+
+.quad1 {
+  top: 0;
+  right: 0;
+  background: red;
+}
+
+.quad2 {
+  top: 0;
+  left: 0;
+  background: purple;
+}
+
+.quad3 {
+  bottom: 0;
+  left: 0;
+  background: #4646ff;
+}
+
+.quad4 {
+  bottom: 0;
+  right: 0;
+  background: purple;
 }
 
 .adminPanel {
