@@ -18,3 +18,7 @@ h4 {
 * {
   box-sizing: border-box;
 }
+
+.mt-2 {
+  margin-top: 16px;
+}

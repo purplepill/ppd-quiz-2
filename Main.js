@@ -116,8 +116,9 @@ const ScoreTable = ({ reality, morality, percent, onClearAnswers }) => {
       <div>Reality Score: {reality.toFixed(2)}</div>
       <div>Morality Score: {morality.toFixed(2)}</div>
       <div>Overall score: {(reality + morality).toFixed(2)}</div>
-      <div>Percent RP: {percent.toFixed(0)}%</div>
+      {/* <div>Percent RP: {percent.toFixed(0)}%</div> */}
       <button
+        className='mt-2'
         onClick={() => {
           onClearAnswers();
         }}
@@ -193,8 +194,10 @@ export default function Home({ admin }) {
   const currentRpPoints = Object.keys(rpScore).length;
   const currentBpPoints = Object.keys(bpScore).length;
 
-  const showScoreTable = currentRpPoints + currentBpPoints === flattened.length;
-  const showQuestions = !showScoreTable || admin;
+  const finishedQuiz = currentRpPoints + currentBpPoints === flattened.length;
+
+  const showScoreTable = admin || finishedQuiz;
+  const showQuestions = admin || !finishedQuiz;
 
   return (
     <div
@@ -305,7 +308,7 @@ export default function Home({ admin }) {
           )}
           {!showScoreTable && <>Complete all questions to see results.</>}
           {admin && (
-            <>
+            <div className={styles.adminPanel}>
               <button
                 onClick={() => {
                   const answers = flattened.reduce((acc, { key, question }) => {
@@ -353,7 +356,123 @@ export default function Home({ admin }) {
               >
                 Answer All BP
               </button>
-            </>
+
+              <button
+                onClick={() => {
+                  const answers = flattened.reduce(
+                    (acc, { key, question }) => {
+                      const [pill, weight] = key.split('_');
+                      const score = WEIGHTS[weight];
+
+                      return {
+                        ...acc,
+                        rp: {
+                          ...acc.rp,
+                          ...(pill === 'RP' && weight === 'MORALITY'
+                            ? { [question]: score }
+                            : {}),
+                        },
+                      };
+                    },
+                    {
+                      rp: rpScore,
+                      bp: bpScore,
+                    }
+                  );
+                  updateRpScore(answers.rp);
+                  updateBpScore(answers.bp);
+                }}
+              >
+                Answer All RP Morality
+              </button>
+
+              <button
+                onClick={() => {
+                  const answers = flattened.reduce(
+                    (acc, { key, question }) => {
+                      const [pill, weight] = key.split('_');
+                      const score = WEIGHTS[weight];
+
+                      return {
+                        ...acc,
+                        bp: {
+                          ...acc.bp,
+                          ...(pill === 'BP' && weight === 'MORALITY'
+                            ? { [question]: score }
+                            : {}),
+                        },
+                      };
+                    },
+                    {
+                      rp: rpScore,
+                      bp: bpScore,
+                    }
+                  );
+                  updateRpScore(answers.rp);
+                  updateBpScore(answers.bp);
+                }}
+              >
+                Answer All BP Morality
+              </button>
+
+              <button
+                onClick={() => {
+                  const answers = flattened.reduce(
+                    (acc, { key, question }) => {
+                      const [pill, weight] = key.split('_');
+                      const score = WEIGHTS[weight];
+
+                      return {
+                        ...acc,
+                        rp: {
+                          ...acc.rp,
+                          ...(pill === 'RP' && weight === 'REALITY'
+                            ? { [question]: score }
+                            : {}),
+                        },
+                      };
+                    },
+                    {
+                      rp: rpScore,
+                      bp: bpScore,
+                    }
+                  );
+                  updateRpScore(answers.rp);
+                  updateBpScore(answers.bp);
+                }}
+              >
+                Answer All RP Reality
+              </button>
+
+              <button
+                onClick={() => {
+                  const answers = flattened.reduce(
+                    (acc, { key, question }) => {
+                      const [pill, weight] = key.split('_');
+                      const score = WEIGHTS[weight];
+
+                      return {
+                        ...acc,
+                        bp: {
+                          ...acc.bp,
+                          ...(pill === 'BP' && weight === 'REALITY'
+                            ? { [question]: score }
+                            : {}),
+                        },
+                      };
+                    },
+                    {
+                      rp: rpScore,
+                      bp: bpScore,
+                    }
+                  );
+                  updateRpScore(answers.rp);
+                  updateBpScore(answers.bp);
+                }}
+              >
+                Answer All BP Reality
+              </button>
+            </div>
           )}
         </div>
       </div>

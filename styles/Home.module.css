@@ -50,6 +50,16 @@
   background: #dff1f7;
 }
 
+.adminPanel {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.adminPanel > * {
+  margin-top: 16px;
+}
+
 @media (min-width: 650px) {
   .container {
     display: grid;
