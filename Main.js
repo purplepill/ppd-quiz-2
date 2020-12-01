@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './styles/Home.module.css';
 import questions from './questions.json';
 import { useEffect, useState } from 'react';
+import AdminPanel from './Admin';
 
 const WEIGHTS = {
   MORALITY: 1.4214,
@@ -111,21 +112,33 @@ const toMoralityScore = (rpScore, bpScore) => {
 
 const ScoreTable = ({ reality, morality, percent, onClearAnswers }) => {
   return (
-    <>
-      <h2>Your results</h2>
-      <div>Reality Score: {reality.toFixed(2)}</div>
-      <div>Morality Score: {morality.toFixed(2)}</div>
-      <div>Overall score: {(reality + morality).toFixed(2)}</div>
-      {/* <div>Percent RP: {percent.toFixed(0)}%</div> */}
-      <button
-        className='mt-2'
-        onClick={() => {
-          onClearAnswers();
-        }}
-      >
-        CLEAR ANSWERS
-      </button>
-    </>
+    <div className={styles.scoreTable}>
+      <div>
+        <h2>Your results</h2>
+        <div>Reality Score: {reality.toFixed(2)}</div>
+        <div>Morality Score: {morality.toFixed(2)}</div>
+        <div>Overall score: {(reality + morality).toFixed(2)}</div>
+        {/* <div>Percent RP: {percent.toFixed(0)}%</div> */}
+        <button
+          className='mt-2'
+          onClick={() => {
+            onClearAnswers();
+          }}
+        >
+          CLEAR ANSWERS
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ScoreGraph = ({ reality, morality }) => {
+  return (
+    <div className={styles.scoreGraph}>
+      {[...new Array(51 * 51)].map((_, i) => (
+        <div key={i}>{i}</div>
+      ))}
+    </div>
   );
 };
 
@@ -189,14 +202,16 @@ export default function Home({ admin }) {
 
   const reality = toRealityScore(rpScore, bpScore);
   const morality = toMoralityScore(rpScore, bpScore);
-  const percent = ((reality + morality + 51) / 102) * 100;
+
+  // Deprecated for now
+  // const percent = ((reality + morality + 51) / 102) * 100;
 
   const currentRpPoints = Object.keys(rpScore).length;
   const currentBpPoints = Object.keys(bpScore).length;
 
   const finishedQuiz = currentRpPoints + currentBpPoints === flattened.length;
 
-  const showScoreTable = admin || finishedQuiz;
+  const showResults = admin || finishedQuiz;
   const showQuestions = admin || !finishedQuiz;
 
   return (
@@ -291,14 +306,11 @@ export default function Home({ admin }) {
       </div>
       <div className={styles.scoreCard}>
         <div>
-          {showScoreTable && (
+          {showResults && (
             <ScoreTable
               {...{
-                rpScore,
-                bpScore,
                 morality,
                 reality,
-                percent,
               }}
               onClearAnswers={() => {
                 updateBpScore({});
@@ -306,175 +318,25 @@ export default function Home({ admin }) {
               }}
             />
           )}
-          {!showScoreTable && <>Complete all questions to see results.</>}
-          {admin && (
-            <div className={styles.adminPanel}>
-              <button
-                onClick={() => {
-                  const answers = flattened.reduce((acc, { key, question }) => {
-                    const [pill, weight] = key.split('_');
-                    const score = WEIGHTS[weight];
+          {!showResults && <>Complete all questions to see results.</>}
+          {admin && <AdminPanel className={styles.adminPanel} {...{
+            updateBpScore,
+            updateRpScore,
+            rpScore,
+            bpScore,
+            WEIGHTS,
+            flattened,
 
-                    return {
-                      rp: {
-                        ...acc.rp,
-                        ...(pill === 'RP' ? { [question]: score } : {}),
-                      },
-                      bp: {
-                        ...acc.bp,
-                        ...(pill === 'BP' ? { [question]: score * -1 } : {}),
-                      },
-                    };
-                  }, {});
-                  updateRpScore(answers.rp);
-                  updateBpScore(answers.bp);
-                }}
-              >
-                Answer All RP
-              </button>
-
-              <button
-                onClick={() => {
-                  const answers = flattened.reduce((acc, { key, question }) => {
-                    const [pill, weight] = key.split('_');
-                    const score = WEIGHTS[weight];
-
-                    return {
-                      rp: {
-                        ...acc.rp,
-                        ...(pill === 'RP' ? { [question]: score * -1 } : {}),
-                      },
-                      bp: {
-                        ...acc.bp,
-                        ...(pill === 'BP' ? { [question]: score } : {}),
-                      },
-                    };
-                  }, {});
-                  updateRpScore(answers.rp);
-                  updateBpScore(answers.bp);
-                }}
-              >
-                Answer All BP
-              </button>
-
-              <button
-                onClick={() => {
-                  const answers = flattened.reduce(
-                    (acc, { key, question }) => {
-                      const [pill, weight] = key.split('_');
-                      const score = WEIGHTS[weight];
-
-                      return {
-                        ...acc,
-                        rp: {
-                          ...acc.rp,
-                          ...(pill === 'RP' && weight === 'MORALITY'
-                            ? { [question]: score }
-                            : {}),
-                        },
-                      };
-                    },
-                    {
-                      rp: rpScore,
-                      bp: bpScore,
-                    }
-                  );
-                  updateRpScore(answers.rp);
-                  updateBpScore(answers.bp);
-                }}
-              >
-                Answer All RP Morality
-              </button>
-
-              <button
-                onClick={() => {
-                  const answers = flattened.reduce(
-                    (acc, { key, question }) => {
-                      const [pill, weight] = key.split('_');
-                      const score = WEIGHTS[weight];
-
-                      return {
-                        ...acc,
-                        bp: {
-                          ...acc.bp,
-                          ...(pill === 'BP' && weight === 'MORALITY'
-                            ? { [question]: score }
-                            : {}),
-                        },
-                      };
-                    },
-                    {
-                      rp: rpScore,
-                      bp: bpScore,
-                    }
-                  );
-                  updateRpScore(answers.rp);
-                  updateBpScore(answers.bp);
-                }}
-              >
-                Answer All BP Morality
-              </button>
-
-              <button
-                onClick={() => {
-                  const answers = flattened.reduce(
-                    (acc, { key, question }) => {
-                      const [pill, weight] = key.split('_');
-                      const score = WEIGHTS[weight];
-
-                      return {
-                        ...acc,
-                        rp: {
-                          ...acc.rp,
-                          ...(pill === 'RP' && weight === 'REALITY'
-                            ? { [question]: score }
-                            : {}),
-                        },
-                      };
-                    },
-                    {
-                      rp: rpScore,
-                      bp: bpScore,
-                    }
-                  );
-                  updateRpScore(answers.rp);
-                  updateBpScore(answers.bp);
-                }}
-              >
-                Answer All RP Reality
-              </button>
-
-              <button
-                onClick={() => {
-                  const answers = flattened.reduce(
-                    (acc, { key, question }) => {
-                      const [pill, weight] = key.split('_');
-                      const score = WEIGHTS[weight];
-
-                      return {
-                        ...acc,
-                        bp: {
-                          ...acc.bp,
-                          ...(pill === 'BP' && weight === 'REALITY'
-                            ? { [question]: score }
-                            : {}),
-                        },
-                      };
-                    },
-                    {
-                      rp: rpScore,
-                      bp: bpScore,
-                    }
-                  );
-                  updateRpScore(answers.rp);
-                  updateBpScore(answers.bp);
-                }}
-              >
-                Answer All BP Reality
-              </button>
-            </div>
-          )}
+          }} />}
         </div>
+      </div>
+      <div>
+        <ScoreGraph
+          {...{
+            morality,
+            reality,
+          }}
+        />
       </div>
     </div>
   );
