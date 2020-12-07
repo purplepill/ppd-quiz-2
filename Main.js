@@ -133,6 +133,10 @@ const ScoreTable = ({ reality, morality, percent, onClearAnswers }) => {
 };
 
 const ScoreGraph = ({ reality, morality }) => {
+  const halfAxis = flattened.length / 2;
+  const realityOffset = ((reality + halfAxis) / flattened.length);
+  const moralityOffset = ((morality + halfAxis) / flattened.length);
+
   return (
     <div className={styles.scoreGraph}>
       {[...new Array(51 * 51)].map((_, i) => (
@@ -144,7 +148,7 @@ const ScoreGraph = ({ reality, morality }) => {
       <div className={styles.quad4} />
       <div
         className={styles.score}
-        style={{ '--reality-score': reality, '--morality-score': morality }}
+        style={{ '--reality-score': realityOffset, '--morality-score': moralityOffset }}
       />
     </div>
   );

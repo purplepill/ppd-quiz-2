@@ -63,7 +63,9 @@
   margin-top: 40px;
   position: relative;
 
-  --cell-size: 12px;
+  --cell-size: 6px;
+  --grid-size: calc(var(--cell-size) * 51);
+  --half-cell: calc(var(--cell-size) / 2);
 }
 
 .score {
@@ -73,12 +75,8 @@
   width: calc(var(--cell-size));
   border-radius: 50%;
 
-  left: calc(
-    (var(--reality-score) + 25.5) * var(--cell-size) - (var(--cell-size) / 2)
-  );
-  bottom: calc(
-    (var(--morality-score) + 25.5) * var(--cell-size) - (var(--cell-size) / 2)
-  );
+  left: calc(var(--reality-score) * var(--grid-size) - var(--half-cell));
+  bottom: calc(var(--morality-score) * var(--grid-size) - var(--half-cell));
 }
 
 .cell {
@@ -156,6 +154,10 @@
   }
   .scoreCard {
     position: relative;
+  }
+
+  .scoreGraph {
+    --cell-size: 12px;
   }
 
   div:not(.quizCompleted) .scoreCard > div {
