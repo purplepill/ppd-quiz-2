@@ -146,6 +146,12 @@ const ScoreGraph = ({ reality, morality }) => {
       <div className={styles.quad2} />
       <div className={styles.quad3} />
       <div className={styles.quad4} />
+      <div className={styles.realityLabel}>
+      ← BP Reality | RP Reality →
+      </div>
+      <div className={styles.moralityLabel}>
+      ← BP Morality | RP Morality →
+      </div>
       <div
         className={styles.score}
         style={{

@@ -85,6 +85,27 @@
   height: var(--cell-size);
 }
 
+.moralityLabel,
+.realityLabel {
+  position: absolute;
+  background: red;
+  background: linear-gradient(90deg, rgba(14,0,255,1) 0%, rgba(9,9,121,1) 47%, rgba(255,0,0,1) 100%);
+  color: white;
+  white-space: nowrap;
+}
+
+.realityLabel {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.moralityLabel {
+  left: -98px;
+  top: 50%;
+  transform: rotate(-90deg);
+}
+
 .quad1,
 .quad2,
 .quad3,
