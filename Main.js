@@ -134,8 +134,8 @@ const ScoreTable = ({ reality, morality, percent, onClearAnswers }) => {
 
 const ScoreGraph = ({ reality, morality }) => {
   const halfAxis = flattened.length / 2;
-  const realityOffset = ((reality + halfAxis) / flattened.length);
-  const moralityOffset = ((morality + halfAxis) / flattened.length);
+  const realityOffset = (reality + halfAxis) / flattened.length;
+  const moralityOffset = (morality + halfAxis) / flattened.length;
 
   return (
     <div className={styles.scoreGraph}>
@@ -148,13 +148,16 @@ const ScoreGraph = ({ reality, morality }) => {
       <div className={styles.quad4} />
       <div
         className={styles.score}
-        style={{ '--reality-score': realityOffset, '--morality-score': moralityOffset }}
+        style={{
+          '--reality-score': realityOffset,
+          '--morality-score': moralityOffset,
+        }}
       />
     </div>
   );
 };
 
-export default function Home({ admin }) {
+export default function Home({ admin, edit }) {
   const [rpScore, updateRpScore] = useState({});
   const [bpScore, updateBpScore] = useState({});
   const [loaded, setLoaded] = useState(false);
@@ -230,7 +233,8 @@ export default function Home({ admin }) {
   const finishedQuiz = currentRpPoints + currentBpPoints === flattened.length;
 
   const showResults = admin || finishedQuiz;
-  const showQuestions = admin || !finishedQuiz;
+  const showQuestions = admin || edit || !finishedQuiz;
+  const showEditLink = showResults && !edit;
 
   return (
     <div
@@ -353,12 +357,26 @@ export default function Home({ admin }) {
         </div>
       </div>
       <div className={styles.scoreGraphContainer}>
-        {showResults && <ScoreGraph
-          {...{
-            morality,
-            reality,
-          }}
-        />}
+        {showResults && (
+          <ScoreGraph
+            {...{
+              morality,
+              reality,
+            }}
+          />
+        )}
+      </div>
+      <div className={styles.links}>
+        {showEditLink && (
+          <div>
+            <a href='/edit'>Edit Results</a>
+          </div>
+        )}
+        {edit && (
+          <div>
+            <a href='/'>View Results</a>
+          </div>
+        )}
       </div>
     </div>
   );
