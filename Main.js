@@ -232,7 +232,7 @@ export default function Home({ admin, edit }) {
 
   const finishedQuiz = currentRpPoints + currentBpPoints === flattened.length;
 
-  const showResults = admin || finishedQuiz;
+  const showResults = edit ? false : admin || finishedQuiz;
   const showQuestions = admin || edit || !finishedQuiz;
   const showEditLink = showResults && !edit;
 
